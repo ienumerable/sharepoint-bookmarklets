@@ -4,7 +4,7 @@ This repo contains a number of different helpful javascript bookmarklets for Sha
 
 ## SharePoint 2010
 
-* SPNavigate.js - Open a command prompt to navigate to any list/library in the current web (with autocomplete).
+* SPNavigate.js - Open a command prompt to quickly navigate to any list/library in the current web (with autocomplete).
 * showWebPropertyBag.js - Show the property bag for the current spweb
 
 
