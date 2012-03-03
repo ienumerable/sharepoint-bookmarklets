@@ -27,3 +27,6 @@ window.location = L_Menu_BaseUrl + "/_layouts/ManageFeatures.aspx";
  
 //Add a webpart
 window.location=window.location+((window.location.toString().indexOf("?")==-1)?"?":"&")+"displaymode=Catalog";
+
+//Set up Groups
+window.location = L_Menu_BaseUrl + "/_layouts/permsetup.aspx";
