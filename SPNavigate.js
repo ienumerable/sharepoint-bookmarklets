@@ -39,7 +39,10 @@
           .append("<link rel='stylesheet' type='text/css' " +
             "href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/base/" +
             "jquery.ui.autocomplete.css'>");
-        //load jQueryUI for autocomplete
+        //load jQueryUI for autocomplete, from cache is ok
+        $.ajaxSetup({
+          cache:true
+        });
         $.getScript("https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js")
           .done(
             function () {
