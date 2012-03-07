@@ -1,23 +1,51 @@
 (function () {
   //Get List names
-  var clientContext, lists, goToList;
+  var clientContext, lists, goToList, commonPages;
   clientContext = new SP.ClientContext.get_current();
   lists = clientContext.get_web().get_lists();
   clientContext.load(lists);
   goToList = function (listTitle) {
-    var targetList = lists.getByTitle(listTitle);
-    clientContext.load(targetList);
-    clientContext.executeQueryAsync(function () {
-      window.location = targetList.get_defaultViewUrl();
-    });
+    if (listTitle.indexOf('@') === 0) {
+      window.location = commonPages[listTitle];
+    } else {
+      var targetList = lists.getByTitle(listTitle);
+      clientContext.load(targetList);
+      clientContext.executeQueryAsync(function () {
+        window.location = targetList.get_defaultViewUrl();
+      });
+    }
   };
   clientContext.executeQueryAsync(function () {
-    var listEnum, allLists, list, script, runAfterJQueryUILoaded;
+    var listEnum, allLists, list, script, runAfterJQueryUILoaded,
+      layoutsUrl, currentLocation, key;
     listEnum = lists.getEnumerator();
     allLists = [];
     while (listEnum.moveNext()) {
       list = listEnum.get_current();
       allLists.push(list.get_title());
+    }
+    //Add common layouts pages
+    layoutsUrl = L_Menu_BaseUrl + '/_layouts/';
+    currentLocation = window.location.toString();
+    currentLocation = currentLocation + (currentLocation.indexOf("?") === -1) ? "?" : "&";
+    commonPages = {
+      '@ViewAllSiteContent' : layoutsUrl + 'viewlsts.aspx',
+      '@SiteSettings' : layoutsUrl + 'settings.aspx',
+      '@SiteCollectionAdmins' : layoutsUrl + 'mngsiteadmin.aspx',
+      '@ChangeSiteMasterPage': layoutsUrl + "changesitemasterpage.aspx",
+      '@AccessRequestEmail': layoutsUrl + 'setrqacc.aspx',
+      '@SitePermissions' : layoutsUrl + 'user.aspx',
+      '@WebPartMaintenancePage' : currentLocation + "contents=1",
+      '@SiteFeatures' : layoutsUrl + 'ManageFeatures.aspx',
+      '@SiteCollectionFeatures' : layoutsUrl + 'ManageFeatures.aspx?Scope=Site',
+      '@AddWebPart' : currentLocation + "displaymode=Catalog",
+      '@SetupSiteGroups' : layoutsUrl + 'permsetup.aspx'
+    };
+    //add commonPages to autocomplete source
+    for (key in commonPages) {
+      if (commonPages.hasOwnProperty(key)) {
+        allLists.push(key);
+      }
     }
     //Load JQuery
     script = document.createElement('script');
@@ -41,7 +69,7 @@
             "jquery.ui.autocomplete.css'>");
         //load jQueryUI for autocomplete, from cache is ok
         $.ajaxSetup({
-          cache:true
+          cache : true
         });
         $.getScript("https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js")
           .done(
