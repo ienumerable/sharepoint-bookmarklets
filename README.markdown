@@ -1,4 +1,4 @@
-# SharePoint-helpers
+# SharePoint-bookmarklets
 
 This repo contains a number of different helpful javascript bookmarklets for SharePoint developers, admins, users etc provided under the MIT license.
 
